@@ -1,6 +1,6 @@
 {
   "name": "field-day",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Zero-config form field grids in React",
   "main": "dist/index.js",
   "scripts": {
