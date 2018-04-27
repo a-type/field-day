@@ -21,7 +21,7 @@ Forms can be a pain to align correctly. It's easy enough to make a grid of field
 
 It looks like this:
 
-![Simple demo](./media/simple_demo.png)
+![Simple demo](./media/simple_demo.PNG)
 
 ```js
 import Field from 'field-day';
@@ -38,7 +38,7 @@ import Field from 'field-day';
 
 Or like this:
 
-![Simple demo](./media/advanced_demo.png)
+![Simple demo](./media/advanced_demo.PNG)
 
 ```js
 <Field.Group columns={4}>
@@ -164,7 +164,7 @@ const rendered = (
 
 That wasn't so hard! We can now easily pass through a `helpText` prop to our fields and get a nicely rendered help text element:
 
-![HelpText demo](./media/helptext_demo.png)
+![HelpText demo](./media/helptext_demo.PNG)
 
 ## How does it work?
 
