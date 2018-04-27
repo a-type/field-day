@@ -2,7 +2,7 @@
   "name": "field-day",
   "version": "0.1.0",
   "description": "Zero-config form field grids in React",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build-lib": "babel src --out-dir dist",
     "build": "run-p build-*",
