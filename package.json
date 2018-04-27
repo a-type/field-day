@@ -1,7 +1,7 @@
 {
-  "name": "react-field-group",
+  "name": "field-day",
   "version": "0.1.0",
-  "description": "",
+  "description": "Zero-config form field grids in React",
   "main": "index.js",
   "scripts": {
     "build-lib": "babel src --out-dir dist",
@@ -10,6 +10,14 @@
     "build-storybook": "build-storybook",
     "flow": "flow"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-type/field-day.git"
+  },
+  "bugs": {
+    "url": "https://github.com/a-type/field-day/issues"
+  },
+  "homepage": "https://github.com/a-type/field-day#readme",
   "author": "Grant Forrest <gaforres@gmail.com>",
   "license": "MIT",
   "devDependencies": {

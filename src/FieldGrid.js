@@ -1,12 +1,12 @@
 // @flow
 import React, { type Node } from 'react';
-import { type FieldElementConfig } from './types';
+import { type FieldElementConfig, type CSSValue } from './types';
 
 export type Props = {
   children: Node,
   columns: number,
-  fieldElementVerticalSpacing: string,
-  fieldHorizontalSpacing: string,
+  fieldElementVerticalSpacing: CSSValue,
+  fieldHorizontalSpacing: CSSValue,
   fieldElements: Array<FieldElementConfig>,
 };
 

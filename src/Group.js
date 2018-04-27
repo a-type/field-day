@@ -1,23 +1,15 @@
 // @flow
-import React, { type Node, type ComponentType } from 'react';
+import React from 'react';
 import FieldGrid from './FieldGrid';
 import { Provider } from './context';
 import { defaultFieldElementConfig } from './constants';
-import { type FieldElementConfig } from './types';
+import { type FieldElementConfig, type FieldGroupProps } from './types';
 
-type Props = {
-  columns: number,
-  children: Node,
-  rowSpacing: string,
-  fieldElementVerticalSpacing: string,
-  fieldHorizontalSpacing: string,
-  fieldElements: Array<FieldElementConfig>,
-};
+class FieldGroup extends React.PureComponent<FieldGroupProps> {
+  static defaultFieldElements = defaultFieldElementConfig;
 
-class Fields extends React.PureComponent<Props> {
   static defaultProps = {
     columns: 2,
-    rowSpacing: '20px',
     fieldElementVerticalSpacing: '5px',
     fieldHorizontalSpacing: '10px',
     fieldElements: defaultFieldElementConfig,
@@ -25,7 +17,6 @@ class Fields extends React.PureComponent<Props> {
 
   render() {
     const {
-      rowSpacing,
       columns,
       children,
       fieldElements,
@@ -33,13 +24,10 @@ class Fields extends React.PureComponent<Props> {
       fieldElementVerticalSpacing,
     } = this.props;
 
-    const childCount = React.Children.count(children);
-
     return (
       <Provider columns={columns} fieldElements={fieldElements}>
         <FieldGrid
           columns={columns}
-          rows={childCount}
           fieldElements={fieldElements}
           fieldElementVerticalSpacing={fieldElementVerticalSpacing}
           fieldHorizontalSpacing={fieldHorizontalSpacing}
@@ -51,4 +39,4 @@ class Fields extends React.PureComponent<Props> {
   }
 }
 
-export default Fields;
+export default FieldGroup;

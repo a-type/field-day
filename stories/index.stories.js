@@ -89,10 +89,12 @@ storiesOf('Field', module)
       fieldHorizontalSpacing="20px"
       fieldElements={[
         {
+          ...Field.Group.defaultFieldElements[0],
           height: 'auto',
           verticalAlign: 'end',
         },
         {
+          ...Field.Group.defaultFieldElements[1],
           height: 'minmax(100px, auto)',
           verticalAlign: 'center',
         },
@@ -152,38 +154,23 @@ storiesOf('Field', module)
     </Field.Group>
   ))
   .add('with custom field elements', () => {
-    const customRenderElements = [
-      ...Field.defaultRenderElements,
+    const customFieldElements = [
+      ...Field.Group.defaultFieldElements,
       // our 'helptext' custom element
-      ({ style, fieldProps }) =>
-        fieldProps.helpText && <i style={style}>{fieldProps.helpText}</i>,
+      {
+        height: '20px',
+        verticalAlign: 'top',
+        render: ({ style, fieldProps }) =>
+          fieldProps.helpText && <i style={style}>{fieldProps.helpText}</i>,
+      },
     ];
 
     return (
-      <Field.Group
-        fieldElements={[
-          {
-            height: 'auto',
-            verticalAlign: 'bottom',
-          },
-          {
-            height: 'minmax(55px, auto)',
-            verticalAlign: 'center',
-          },
-          {
-            height: '20px',
-            verticalAlign: 'top',
-          },
-        ]}
-      >
-        <Field
-          renderElements={customRenderElements}
-          label="Label"
-          helpText="An explanation of the field"
-        >
+      <Field.Group fieldElements={customFieldElements}>
+        <Field label="Label" helpText="An explanation of the field">
           <Input />
         </Field>
-        <Field renderElements={customRenderElements} label="Label 2">
+        <Field label="Label 2">
           <Input />
         </Field>
       </Field.Group>

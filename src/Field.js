@@ -4,52 +4,17 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import FieldGroup from './Group';
 import { Consumer, type RenderArgs, type FieldInfo } from './context';
-import { type FieldElementConfig } from './types';
-
-export type RenderElementFunctionArgs = {
-  style: {},
-  fieldProps: Props,
-};
-export type RenderElementFunction = (args: RenderElementFunctionArgs) => Node;
-
-export type UserSuppliedProps = any;
-export type Props = UserSuppliedProps & {
-  children: Node,
-  columnSpan: number,
-  renderElements: Array<RenderElementFunction>,
-};
-
-const getHtmlFor = (children): ?string => {
-  if (children.props && children.props.id) {
-    return ((children.props.id: any): string);
-  }
-};
-const defaultRenderLabel: RenderElementFunction = ({ style, fieldProps }) =>
-  fieldProps.label && (
-    <label
-      style={style}
-      htmlFor={fieldProps.fieldId || getHtmlFor(fieldProps.children)}
-    >
-      {fieldProps.label}
-    </label>
-  );
-
-const defaultRenderContent: RenderElementFunction = ({ fieldProps, style }) =>
-  fieldProps.children && <div style={style}>{fieldProps.children}</div>;
-
-const fieldDefaultRenderElements = [defaultRenderLabel, defaultRenderContent];
+import { type FieldElementConfig, type FieldProps } from './types';
 
 /**
  * A single Field element. **Important:** Field cannot be used on its own. Please use Field
  * within the Field.Group component.
  */
-class Field extends React.Component<Props> {
+class Field extends React.Component<FieldProps> {
   static Group = FieldGroup;
-  static defaultRenderElements = fieldDefaultRenderElements;
 
   static defaultProps = {
     columnSpan: 1,
-    renderElements: fieldDefaultRenderElements,
   };
 
   stylesFor = (
@@ -77,7 +42,7 @@ class Field extends React.Component<Props> {
 
   callRenderElements = (fieldInfo: FieldInfo) =>
     fieldInfo.elements.map((element, index) =>
-      this.props.renderElements[index]({
+      element.render({
         style: this.stylesFor(element, index, fieldInfo),
         fieldProps: this.props,
       }),
