@@ -77,6 +77,7 @@ Or like this:
 | `children` | `string | Node` | The contents to render within the Field, usually an input of some sort. |
 | `label` | `string | Node` | In a default Field, you can pass a string or node to `label` to render the contents of the label above the field children. |
 | `fieldId` | `string` | In a default Field, you can pass an explicit id string to indicate the id applied to your input, and the label will use it as a `for` attribute. |
+| `align` | `string` | In a default Field, this prop will align the content of your field within the available space. Can be `start`, `end`, `stretch`, `center`; defaults to `stretch`. |
 
 **Static properties**
 

@@ -17,7 +17,11 @@ const defaultRenderLabel: RenderElementFunction = ({ style, fieldProps }) =>
   );
 
 const defaultRenderContent: RenderElementFunction = ({ fieldProps, style }) =>
-  fieldProps.children && <div style={style}>{fieldProps.children}</div>;
+  fieldProps.children && (
+    <div style={{ ...style, justifySelf: fieldProps.align || 'stretch' }}>
+      {fieldProps.children}
+    </div>
+  );
 
 const fieldDefaultRenderElements = [defaultRenderLabel, defaultRenderContent];
 

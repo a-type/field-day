@@ -83,6 +83,37 @@ storiesOf('Field', module)
       </Field>
     </Field.Group>
   ))
+  .add('field alignment', () => (
+    <Field.Group>
+      <Field align="start" label="Start">
+        <Input />
+      </Field>
+      <Field align="center" label="Center">
+        <Input />
+      </Field>
+      <Field align="end" label="End">
+        <Input />
+      </Field>
+      <Field columnSpan={2}>
+        <Input value="Below, a more useful scenario..." />
+      </Field>
+      <Field label="Username">
+        <Input />
+      </Field>
+      <Field label="Password">
+        <Input />
+      </Field>
+      <Field align="center">
+        <div>
+          <input type="checkbox" value="remember" />
+          <label>Remember me</label>
+        </div>
+      </Field>
+      <Field align="end">
+        <button>Sign up</button>
+      </Field>
+    </Field.Group>
+  ))
   .add('customized spacing', () => (
     <Field.Group
       fieldElementVerticalSpacing="8px"
