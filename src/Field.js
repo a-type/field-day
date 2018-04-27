@@ -1,84 +1,134 @@
-import React from 'react';
+// @flow
+import React, { type Node } from 'react';
 import PropTypes from 'prop-types';
-import DefaultLabel from './styles/Label';
-import FieldContent from './styles/FieldContent';
 import { get } from 'lodash';
 import FieldGroup from './Group';
+import { Consumer, type RenderArgs, type FieldProps } from './context';
 
-const defaultRenderLabel = ({ children, htmlFor, style }) => (
+export type RenderLabelFunctionArgs = {
+  children: Node,
+  htmlFor: ?string,
+  style: {},
+};
+export type RenderLabelFunction = (args: RenderLabelFunctionArgs) => Node;
+
+export type RenderContentFunctionArgs = {
+  children: Node,
+  style: {},
+  fieldProps: Props,
+};
+export type RenderContentFunction = (args: RenderContentFunctionArgs) => Node;
+
+export type UserSuppliedProps = {};
+export type Props = UserSuppliedProps & {
+  children: Node,
+  columnSpan: number,
+  renderLabel: RenderLabelFunction,
+  renderContent: RenderContentFunction,
+  label: Node,
+  htmlFor: string,
+  contentSpacing: string,
+  alignContent: 'left' | 'right' | 'center' | 'stretch',
+};
+
+const defaultRenderLabel: RenderLabelFunction = ({
+  children,
+  htmlFor,
+  style,
+}) => (
   <label style={style} htmlFor={htmlFor}>
     {children}
   </label>
 );
 
-const defaultRenderContent = ({ children, fieldProps, style }) => (
-  <FieldContent
-    style={style}
-    align={fieldProps.align}
-    fieldContentSpacing={fieldProps.contentSpacing || '5px'}
-  >
-    {children}
-  </FieldContent>
+const defaultRenderContent: RenderContentFunction = ({ children, style }) => (
+  <div style={style}>{children}</div>
 );
 
 /**
  * A single Field element. **Important:** Field cannot be used on its own. Please use Field
  * within the Field.Group component.
  */
-class Field extends React.Component {
+class Field extends React.Component<Props> {
   static Group = FieldGroup;
 
   static defaultProps = {
-    column: 0,
     columnSpan: 1,
     renderLabel: defaultRenderLabel,
     renderContent: defaultRenderContent,
+    contentSpacing: '5px',
+    alignContent: 'stretch',
     label: null,
   };
 
-  stylesFor = gridName => {
-    const { column, columnSpan } = this.props;
+  stylesFor = (
+    elementName: string,
+    { column, row, columns, fieldIndex, elementOrder }: FieldProps,
+  ): {} => {
+    const { columnSpan } = this.props;
 
-    const endColumn = column + columnSpan - 1;
-    return {
-      gridArea: `${gridName}${column} / ${gridName}${column} / ${gridName}${endColumn} / ${gridName}${endColumn}`,
+    const elementRow =
+      row * elementOrder.length + elementOrder.indexOf(elementName);
+
+    const styles = {
+      gridArea: `${elementRow + 1} / ${column + 1} / auto / ${column +
+        columnSpan +
+        1}`,
       // align-self determines how the parts vertically align if an adjacent part is taller.
       // labels should stick to the bottom if an adjacent label has two or more lines.
       // content and helpText should stick to the top if an adjacent element is taller than them.
-      alignSelf: gridName === 'label' ? 'end' : 'start',
+      // TODO: make user-controlled?
+      alignSelf: elementName === 'label' ? 'end' : 'start',
     };
+
+    return styles;
   };
 
-  renderLabel = () => {
+  getHtmlFor = (): ?string => {
+    const { children, htmlFor } = this.props;
+
+    if (htmlFor) {
+      return htmlFor;
+    }
+
+    if (children.props && children.props.id) {
+      return ((children.props.id: any): string);
+    }
+  };
+
+  renderLabel = (fieldProps: FieldProps) => {
     const { label, renderLabel, children } = this.props;
 
     if (!label) {
       return null;
     }
 
-    const htmlFor =
-      (children || null) && (children.props || null) && children.props.id;
+    const htmlFor = this.getHtmlFor();
 
     return renderLabel({
       htmlFor,
       children: label,
-      style: this.stylesFor('label'),
+      style: this.stylesFor('label', fieldProps),
     });
   };
 
-  render() {
-    const { children, renderContent, alignContent } = this.props;
+  renderField = ({ getFieldProps }: RenderArgs) => {
+    const fieldProps = getFieldProps({ columnSpan: this.props.columnSpan });
 
     return (
       <React.Fragment>
-        {renderContent({
-          style: this.stylesFor('content'),
-          children,
-          align: alignContent,
+        {this.renderLabel(fieldProps)}
+        {this.props.renderContent({
+          style: this.stylesFor('content', fieldProps),
+          children: this.props.children,
+          fieldProps: this.props,
         })}
-        {this.renderLabel()}
       </React.Fragment>
     );
+  };
+
+  render() {
+    return <Consumer>{this.renderField}</Consumer>;
   }
 }
 
