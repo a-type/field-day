@@ -76,6 +76,7 @@ Or like this:
 | `columnSpan`    | `number` | Controls the number of columns this field will take up in the layout. If two adjacent fields are too wide to fit together on a row, the second one will wrap. |
 | `children` | `string | Node` | The contents to render within the Field, usually an input of some sort. |
 | `label` | `string | Node` | In a default Field, you can pass a string or node to `label` to render the contents of the label above the field children. |
+| `fieldId` | `string` | In a default Field, you can pass an explicit id string to indicate the id applied to your input, and the label will use it as a `for` attribute. |
 
 **Static properties**
 
@@ -84,6 +85,8 @@ Or like this:
 | Group | A convenience reference for the FieldGroup component which MUST wrap all fields as a direct parent. |
 
 By default, `Field` renders a label and content pair. The label is placed above the content. They are placed 5px from each other vertically. However, _all_ of these details are customizable.
+
+As a bonus, in addition to the `fieldId` behavior mentioned above, the default Field label will take a look at the `childen` you pass into the `Field` itself and see if it's a node with an `id` prop. If it is, the label will automatically use that as its `for` attribute.
 
 ### `<Field.Group>`
 
@@ -165,6 +168,21 @@ const rendered = (
 That wasn't so hard! We can now easily pass through a `helpText` prop to our fields and get a nicely rendered help text element:
 
 ![HelpText demo](./media/helptext_demo.PNG)
+
+Now, what if we want _all_ our field groups to behave this way? Well, we can create our own copy of `Field` and `FieldGroup` in our project using `recompose`'s `withProps`.
+
+```js
+import Field from 'field-day';
+import { withProps } from 'recompose';
+
+Field.Group = withProps({
+  fieldElements: customFieldElements,
+})(Field.Group);
+
+export default Field;
+```
+
+Nice!
 
 ## How does it work?
 
