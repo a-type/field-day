@@ -7,7 +7,6 @@
     "build-lib": "babel src --out-dir dist",
     "build": "run-p build-*",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
     "flow": "flow",
     "prepublish": "npm run build"
   },
