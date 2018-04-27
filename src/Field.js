@@ -3,47 +3,41 @@ import React, { type Node } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import FieldGroup from './Group';
-import { Consumer, type RenderArgs, type FieldProps } from './context';
+import { Consumer, type RenderArgs, type FieldInfo } from './context';
+import { type FieldElementConfig } from './types';
 
-export type RenderLabelFunctionArgs = {
-  children: Node,
-  htmlFor: ?string,
-  style: {},
-};
-export type RenderLabelFunction = (args: RenderLabelFunctionArgs) => Node;
-
-export type RenderContentFunctionArgs = {
-  children: Node,
+export type RenderElementFunctionArgs = {
   style: {},
   fieldProps: Props,
 };
-export type RenderContentFunction = (args: RenderContentFunctionArgs) => Node;
+export type RenderElementFunction = (args: RenderElementFunctionArgs) => Node;
 
-export type UserSuppliedProps = {};
+export type UserSuppliedProps = any;
 export type Props = UserSuppliedProps & {
   children: Node,
   columnSpan: number,
-  renderLabel: RenderLabelFunction,
-  renderContent: RenderContentFunction,
-  label: Node,
-  htmlFor: string,
-  contentSpacing: string,
-  alignContent: 'left' | 'right' | 'center' | 'stretch',
+  renderElements: Array<RenderElementFunction>,
 };
 
-const defaultRenderLabel: RenderLabelFunction = ({
-  children,
-  htmlFor,
-  style,
-}) => (
-  <label style={style} htmlFor={htmlFor}>
-    {children}
-  </label>
-);
+const getHtmlFor = (children): ?string => {
+  if (children.props && children.props.id) {
+    return ((children.props.id: any): string);
+  }
+};
+const defaultRenderLabel: RenderElementFunction = ({ style, fieldProps }) =>
+  fieldProps.label && (
+    <label
+      style={style}
+      htmlFor={fieldProps.fieldId || getHtmlFor(fieldProps.children)}
+    >
+      {fieldProps.label}
+    </label>
+  );
 
-const defaultRenderContent: RenderContentFunction = ({ children, style }) => (
-  <div style={style}>{children}</div>
-);
+const defaultRenderContent: RenderElementFunction = ({ fieldProps, style }) =>
+  fieldProps.children && <div style={style}>{fieldProps.children}</div>;
+
+const fieldDefaultRenderElements = [defaultRenderLabel, defaultRenderContent];
 
 /**
  * A single Field element. **Important:** Field cannot be used on its own. Please use Field
@@ -51,24 +45,21 @@ const defaultRenderContent: RenderContentFunction = ({ children, style }) => (
  */
 class Field extends React.Component<Props> {
   static Group = FieldGroup;
+  static defaultRenderElements = fieldDefaultRenderElements;
 
   static defaultProps = {
     columnSpan: 1,
-    renderLabel: defaultRenderLabel,
-    renderContent: defaultRenderContent,
-    contentSpacing: '5px',
-    alignContent: 'stretch',
-    label: null,
+    renderElements: fieldDefaultRenderElements,
   };
 
   stylesFor = (
-    elementName: string,
-    { column, row, columns, fieldIndex, elementOrder }: FieldProps,
+    element: FieldElementConfig,
+    elementIndex: number,
+    { column, row, columns, fieldIndex, elements }: FieldInfo,
   ): {} => {
     const { columnSpan } = this.props;
 
-    const elementRow =
-      row * elementOrder.length + elementOrder.indexOf(elementName);
+    const elementRow = row * elements.length + elementIndex;
 
     const styles = {
       gridArea: `${elementRow + 1} / ${column + 1} / auto / ${column +
@@ -78,52 +69,25 @@ class Field extends React.Component<Props> {
       // labels should stick to the bottom if an adjacent label has two or more lines.
       // content and helpText should stick to the top if an adjacent element is taller than them.
       // TODO: make user-controlled?
-      alignSelf: elementName === 'label' ? 'end' : 'start',
+      alignSelf: element.verticalAlign,
     };
 
     return styles;
   };
 
-  getHtmlFor = (): ?string => {
-    const { children, htmlFor } = this.props;
+  callRenderElements = (fieldInfo: FieldInfo) =>
+    fieldInfo.elements.map((element, index) =>
+      this.props.renderElements[index]({
+        style: this.stylesFor(element, index, fieldInfo),
+        fieldProps: this.props,
+      }),
+    );
 
-    if (htmlFor) {
-      return htmlFor;
-    }
-
-    if (children.props && children.props.id) {
-      return ((children.props.id: any): string);
-    }
-  };
-
-  renderLabel = (fieldProps: FieldProps) => {
-    const { label, renderLabel, children } = this.props;
-
-    if (!label) {
-      return null;
-    }
-
-    const htmlFor = this.getHtmlFor();
-
-    return renderLabel({
-      htmlFor,
-      children: label,
-      style: this.stylesFor('label', fieldProps),
-    });
-  };
-
-  renderField = ({ getFieldProps }: RenderArgs) => {
-    const fieldProps = getFieldProps({ columnSpan: this.props.columnSpan });
+  renderField = ({ getFieldInfo }: RenderArgs) => {
+    const fieldInfo = getFieldInfo({ columnSpan: this.props.columnSpan });
 
     return (
-      <React.Fragment>
-        {this.renderLabel(fieldProps)}
-        {this.props.renderContent({
-          style: this.stylesFor('content', fieldProps),
-          children: this.props.children,
-          fieldProps: this.props,
-        })}
-      </React.Fragment>
+      <React.Fragment>{this.callRenderElements(fieldInfo)}</React.Fragment>
     );
   };
 

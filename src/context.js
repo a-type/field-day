@@ -1,28 +1,29 @@
 // @flow
 import React, { createContext, PureComponent, type Node } from 'react';
+import { type FieldElementConfig } from './constants';
 
 const FieldGroupContext = createContext();
 
 export type Props = {
   columns: number,
   children: Node,
-  elementOrder: Array<string>,
+  fieldElements: Array<FieldElementConfig>,
 };
 
-export type FieldPropArgs = {
+export type FieldInfoArgs = {
   columnSpan: number,
 };
 
-export type FieldProps = {
+export type FieldInfo = {
   column: number,
   row: number,
   columns: number,
   fieldIndex: number,
-  elementOrder: Array<string>,
+  elements: Array<FieldElementConfig>,
 };
 
 export type RenderArgs = {
-  getFieldProps(args: FieldPropArgs): FieldProps,
+  getFieldInfo(args: FieldInfoArgs): FieldInfo,
 };
 
 export class Provider extends PureComponent<Props> {
@@ -40,7 +41,7 @@ export class Provider extends PureComponent<Props> {
     this.currentItem = 0;
   };
 
-  getFieldProps = ({ columnSpan = 1 }: FieldPropArgs): FieldProps => {
+  getFieldInfo = ({ columnSpan = 1 }: FieldInfoArgs): FieldInfo => {
     const { columns } = this.props;
 
     if (columnSpan > columns) {
@@ -64,11 +65,11 @@ export class Provider extends PureComponent<Props> {
       row: this.currentRow,
       columns,
       fieldIndex: this.currentItem,
-      elementOrder: this.props.elementOrder,
+      elements: this.props.fieldElements,
     };
   };
 
-  value = { getFieldProps: this.getFieldProps };
+  value = { getFieldInfo: this.getFieldInfo };
 
   render() {
     // re-rendering fields every time, so we clear them out

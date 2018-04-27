@@ -87,7 +87,16 @@ storiesOf('Field', module)
     <Field.Group
       fieldElementVerticalSpacing="8px"
       fieldHorizontalSpacing="20px"
-      fieldElementHeights={['auto', 'minmax(60px, auto)']}
+      fieldElements={[
+        {
+          height: 'auto',
+          verticalAlign: 'end',
+        },
+        {
+          height: 'minmax(100px, auto)',
+          verticalAlign: 'center',
+        },
+      ]}
     >
       <Field label="much roomier">
         <Input />
@@ -115,4 +124,68 @@ storiesOf('Field', module)
         <Input />
       </Field>
     </Field.Group>
-  ));
+  ))
+  .add('different element sizes', () => (
+    <Field.Group>
+      <Field label="Doesn't matter the size of the element">
+        <Input />
+      </Field>
+      <Field label="Rows stay aligned!">
+        <input />
+      </Field>
+      <Field label="Not even extra large labels will disrupt the field alignment, even if the field they annotate is smaller than its siblings.">
+        <input />
+      </Field>
+      <Field>
+        <Input />
+      </Field>
+    </Field.Group>
+  ))
+  .add('assigning ids to labels', () => (
+    <Field.Group>
+      <Field label="Check the DOM to see the 'for' attr">
+        <Input id="childId" />
+      </Field>
+      <Field label="You can pass a fieldId prop, too" fieldId="propId">
+        <Input />
+      </Field>
+    </Field.Group>
+  ))
+  .add('with custom field elements', () => {
+    const customRenderElements = [
+      ...Field.defaultRenderElements,
+      // our 'helptext' custom element
+      ({ style, fieldProps }) =>
+        fieldProps.helpText && <i style={style}>{fieldProps.helpText}</i>,
+    ];
+
+    return (
+      <Field.Group
+        fieldElements={[
+          {
+            height: 'auto',
+            verticalAlign: 'bottom',
+          },
+          {
+            height: 'minmax(55px, auto)',
+            verticalAlign: 'center',
+          },
+          {
+            height: '20px',
+            verticalAlign: 'top',
+          },
+        ]}
+      >
+        <Field
+          renderElements={customRenderElements}
+          label="Label"
+          helpText="An explanation of the field"
+        >
+          <Input />
+        </Field>
+        <Field renderElements={customRenderElements} label="Label 2">
+          <Input />
+        </Field>
+      </Field.Group>
+    );
+  });

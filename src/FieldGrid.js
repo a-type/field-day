@@ -1,12 +1,13 @@
 // @flow
 import React, { type Node } from 'react';
+import { type FieldElementConfig } from './types';
 
 export type Props = {
   children: Node,
   columns: number,
   fieldElementVerticalSpacing: string,
   fieldHorizontalSpacing: string,
-  fieldElementHeights: Array<string>,
+  fieldElements: Array<FieldElementConfig>,
 };
 
 const FieldRow = ({
@@ -14,13 +15,13 @@ const FieldRow = ({
   columns = 2,
   fieldElementVerticalSpacing = '5px',
   fieldHorizontalSpacing = '10px',
-  fieldElementHeights = ['auto', 'auto'],
+  fieldElements,
 }: Props) => (
   <div
     style={{
       display: 'grid',
       // each element has its own row in the grid, with its own height
-      gridAutoRows: fieldElementHeights.join(' '),
+      gridAutoRows: fieldElements.map(el => el.height).join(' '),
       // each column has an equal size. To make fields larger than
       // adjacent fields, use the columnSpan prop on Field to span
       // multiple columns. This keeps all field sizes directly proportional

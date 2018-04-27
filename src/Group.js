@@ -2,6 +2,8 @@
 import React, { type Node, type ComponentType } from 'react';
 import FieldGrid from './FieldGrid';
 import { Provider } from './context';
+import { defaultFieldElementConfig } from './constants';
+import { type FieldElementConfig } from './types';
 
 type Props = {
   columns: number,
@@ -9,8 +11,7 @@ type Props = {
   rowSpacing: string,
   fieldElementVerticalSpacing: string,
   fieldHorizontalSpacing: string,
-  fieldElementOrder: Array<string>,
-  fieldElementHeights: Array<string>,
+  fieldElements: Array<FieldElementConfig>,
 };
 
 class Fields extends React.PureComponent<Props> {
@@ -19,8 +20,7 @@ class Fields extends React.PureComponent<Props> {
     rowSpacing: '20px',
     fieldElementVerticalSpacing: '5px',
     fieldHorizontalSpacing: '10px',
-    fieldElementOrder: ['label', 'content'],
-    fieldElementHeights: ['auto', 'auto'],
+    fieldElements: defaultFieldElementConfig,
   };
 
   render() {
@@ -28,8 +28,7 @@ class Fields extends React.PureComponent<Props> {
       rowSpacing,
       columns,
       children,
-      fieldElementHeights,
-      fieldElementOrder,
+      fieldElements,
       fieldHorizontalSpacing,
       fieldElementVerticalSpacing,
     } = this.props;
@@ -37,14 +36,13 @@ class Fields extends React.PureComponent<Props> {
     const childCount = React.Children.count(children);
 
     return (
-      <Provider columns={columns} elementOrder={fieldElementOrder}>
+      <Provider columns={columns} fieldElements={fieldElements}>
         <FieldGrid
           columns={columns}
           rows={childCount}
-          fieldElementHeights={fieldElementHeights}
+          fieldElements={fieldElements}
           fieldElementVerticalSpacing={fieldElementVerticalSpacing}
           fieldHorizontalSpacing={fieldHorizontalSpacing}
-          fieldElementOrder={fieldElementOrder}
         >
           {children}
         </FieldGrid>
