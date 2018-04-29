@@ -104,7 +104,9 @@ As a bonus, in addition to the `fieldId` behavior mentioned above, the default F
 >\* You could probably actually render a Field nested within a Group, but only if none of the components between the Group and Field actually render DOM nodes. Field layout is reliant on the Field content being a direct child of the Group DOM element.
 
 **Static Properties**
+
 | Property | Description |
+| - | - |
 | defaultFieldElements | _Advanced_: The default configurations which Field uses to render its contents. Useful for extending if you customize the way Field contents align, or what constitutes a Field. |
 
 ### Customizing Behavior
