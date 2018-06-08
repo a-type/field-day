@@ -7,6 +7,9 @@ export type Props = {
   columns: number,
   fieldSpacing: CSSValue,
   fieldElements: Array<FieldElementConfig>,
+  style: {},
+  id: string,
+  className: string,
 };
 
 const FieldRow = ({
@@ -14,9 +17,13 @@ const FieldRow = ({
   columns = 2,
   fieldSpacing = '10px',
   fieldElements,
+  style = {},
+  id,
+  className,
 }: Props) => (
   <div
     style={{
+      ...style,
       display: 'grid',
       // each element has its own row in the grid, with its own height
       gridAutoRows: fieldElements.map(el => el.height).join(' '),
@@ -27,6 +34,8 @@ const FieldRow = ({
       // defines spacing between rows and columns
       gridGap: `0 ${fieldSpacing}`,
     }}
+    id={id}
+    className={className}
   >
     {children}
   </div>

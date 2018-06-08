@@ -98,6 +98,9 @@ As a bonus, in addition to the `fieldId` behavior mentioned above, the default F
 | `columns` | `number` | The number of columns in the grid. Defaults `2` |
 | `children` | `Array<Field>` | Children of a `FieldGroup` must be `Field`s, and all `Field` components must be rendered directly inside a `FieldGroup`* |
 | `fieldSpacing` | `CSSValue` | A string CSS value which determines the amount of space between fields in a row.
+| `style` | `{}` | Override style properties on the Group element
+| `id` | `string` | Supplies an id to the Group element
+| `className` | `string` | Supplies a class name to the Group element
 | `fieldElements` | `Array<FieldElementConfig>` | _Advanced_: Customize the behavior of the elements within a field by supplying customized configs for each field element. This allows changing element heights and vertical alignment of elements. Specifying `fieldElements` is **required** if you customize the rendering of `Field`s inside this `Group`. |
 
 >\* You could probably actually render a Field nested within a Group, but only if none of the components between the Group and Field actually render DOM nodes. Field layout is reliant on the Field content being a direct child of the Group DOM element.

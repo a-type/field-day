@@ -30,4 +30,7 @@ export type FieldGroupProps = {
   children: ChildrenArray<Element<typeof Field>>,
   fieldSpacing: CSSValue,
   fieldElements: Array<FieldElementConfig>,
+  style: {},
+  className: string,
+  id: string,
 };

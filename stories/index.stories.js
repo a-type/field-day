@@ -231,4 +231,34 @@ storiesOf('Field', module)
         </Field>
       </Field.Group>
     );
+  })
+  .add('applying customization props to the group', () => {
+    return (
+      <div>
+        <Field.Group
+          id="fieldGroup"
+          className="field-group"
+          style={{ marginBottom: '-10px' }}
+        >
+          <Field label="Label">
+            <Input />
+          </Field>
+          <Field label="Label 2">
+            <Input />
+          </Field>
+          <Field label="Label 3">
+            <Input />
+          </Field>
+          <Field label="Label 4">
+            <Input />
+          </Field>
+          <Field label="Label 5" columnSpan={2}>
+            <Input value="The margin at the bottom has been removed by custom styling!" />
+          </Field>
+        </Field.Group>
+        <div style={{ background: 'lightgray', padding: '20px' }}>
+          Some content below the group
+        </div>
+      </div>
+    );
   });
