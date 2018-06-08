@@ -84,21 +84,32 @@ storiesOf('Field', module)
     </Field.Group>
   ))
   .add('field alignment', () => (
-    <Field.Group columns={1}>
-      <Field horizontalAlign="start" labelHorizontalAlign="start" label="Start">
+    <Field.Group columns={2}>
+      <Field
+        columnSpan={2}
+        horizontalAlign="start"
+        labelHorizontalAlign="start"
+        label="Start"
+      >
         <Input />
       </Field>
       <Field
+        columnSpan={2}
         horizontalAlign="center"
         labelHorizontalAlign="center"
         label="Center"
       >
         <Input />
       </Field>
-      <Field horizontalAlign="end" labelHorizontalAlign="end" label="End">
+      <Field
+        columnSpan={2}
+        horizontalAlign="end"
+        labelHorizontalAlign="end"
+        label="End"
+      >
         <Input />
       </Field>
-      <Field>
+      <Field columnSpan={2}>
         <Input value="Below, a more useful scenario..." />
       </Field>
       <Field label="Username">
@@ -107,7 +118,7 @@ storiesOf('Field', module)
       <Field label="Password">
         <Input />
       </Field>
-      <Field horizontalAlign="end">
+      <Field columnSpan={2} horizontalAlign="end">
         <div>
           <input type="checkbox" value="remember" />
           <label>Remember me</label>
