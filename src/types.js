@@ -17,11 +17,13 @@ export type RenderElementFunctionArgs = {
 };
 export type RenderElementFunction = (args: RenderElementFunctionArgs) => Node;
 
+export type Alignment = 'end' | 'start' | 'stretch' | 'center';
 export type FieldElementConfig = {
   height: CSSValue,
-  verticalAlign: 'end' | 'start' | 'stretch' | 'center',
   render: RenderElementFunction,
-};
+  verticalAlign?: Alignment,
+  horizontalAlign?: Alignment,
+} & {};
 
 export type FieldGroupProps = {
   columns: number,

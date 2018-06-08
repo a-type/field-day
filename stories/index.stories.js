@@ -192,10 +192,9 @@ storiesOf('Field', module)
       {
         height: 'auto',
         verticalAlign: 'top',
-        spaceAfter: '10px',
         render: ({ gridArea, fieldProps, config }) =>
           fieldProps.helpText && (
-            <i style={{ gridArea, marginBottom: config.spaceAfter }}>
+            <i style={{ gridArea, marginBottom: '10px' }}>
               {fieldProps.helpText}
             </i>
           ),
