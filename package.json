@@ -6,6 +6,7 @@
   "scripts": {
     "build-clean": "rimraf dist",
     "build-lib": "babel src --out-dir dist",
+    "build-storybook": "build-storybook -c .storybook -o docs",
     "build": "run-p build-*",
     "storybook": "start-storybook -p 6006",
     "flow": "flow",
