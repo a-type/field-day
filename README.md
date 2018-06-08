@@ -5,7 +5,7 @@ No one wants to spend hours thinking about how to align fields in a form, so I d
 ![Visual demo of library](./media/demo.gif)
 
 **Table of Contents**
-- [field-day](#field-day)
+- [🤸 field-day](#field-day)
   - [Introduction](#introduction)
   - [What's in the box](#whats-in-the-box)
     - [`<Field>`](#field)
@@ -97,8 +97,7 @@ As a bonus, in addition to the `fieldId` behavior mentioned above, the default F
 | - | - | - |
 | `columns` | `number` | The number of columns in the grid. Defaults `2` |
 | `children` | `Array<Field>` | Children of a `FieldGroup` must be `Field`s, and all `Field` components must be rendered directly inside a `FieldGroup`* |
-| `fieldElementVerticalSpacing` | `CSSValue` | A string CSS value which determines the amount of space between elements inside a field, vertically.
-| `fieldHorizontalSpacing` | `CSSValue` | A string CSS value which determines the amount of space between fields, horizontally.
+| `fieldSpacing` | `CSSValue` | A string CSS value which determines the amount of space between fields in a row.
 | `fieldElements` | `Array<FieldElementConfig>` | _Advanced_: Customize the behavior of the elements within a field by supplying customized configs for each field element. This allows changing element heights and vertical alignment of elements. Specifying `fieldElements` is **required** if you customize the rendering of `Field`s inside this `Group`. |
 
 >\* You could probably actually render a Field nested within a Group, but only if none of the components between the Group and Field actually render DOM nodes. Field layout is reliant on the Field content being a direct child of the Group DOM element.
@@ -128,6 +127,7 @@ To do any of these things, you'll need to override a `Field.Group`'s `fieldEleme
 {
   height: 'auto',
   verticalAlign: 'center',
+  horizontalAlign: 'start',
   render: ({ fieldProps, style }) =>
     fieldProps.children && <div style={style}>{fieldProps.children}</div>,
 }
@@ -139,7 +139,7 @@ The `height` of an element determines the characteristics of its row in the grid
 
 The `verticalAlign` of an element determines how it 'sticks' vetically to its fellow field elements. This makes a big difference as adjacent elements vary in size. For instance, if the label in the next column is `100px` high, and you want your label to 'stick' to the bottom of the created area so that it sits just above the input, you'd want to use `verticalAlign: 'end'` (this is the default behavior for labels, by the way). `center`, `stretch`, `start` are all also options (or, technically, anything you could supply to the `align-self` CSS property).
 
-Finally, the `render` function. This does all the work of actually rendering the element based on the available information in the Field. It's passed a single object, `{ style, fieldProps }`. You **must** apply `style` to the top-level DOM element of your field element. After that, you're free to do whatever you like utilizing `fieldProps`, which are **all the props passed to your field**. That means you can pass custom props to your field and use them when rendering your custom field elements, letting you craft your own component API.
+Finally, the `render` function. This does all the work of actually rendering the element based on the available information in the Field. It's passed a single object, `{ gridArea, fieldProps, config }`. You **must** apply `gridArea` to the CSS styles of the top-level DOM element of your field element. After that, you're free to do whatever you like utilizing `fieldProps`, which are **all the props passed to your field**. That means you can pass custom props to your field and use them when rendering your custom field elements, letting you craft your own component API. You also get `config`, which is the original `FieldElementConfig` you defined for this field element. You can use that to apply default values that you may have defined in the config.
 
 As an example, let's add a "Help Text" element to our fields. The help text should sit below the input, 'sticking' to the bottom of it. It shouldn't be more than 20px high at most. And we want to render it using italics, getting its content from a `helpText` prop we supply to our Field.
 
@@ -151,8 +151,8 @@ const customFieldElements = [
   {
     height: 'minmax(auto, 20px)',
     verticalAlign: 'top',
-    render: ({ style, fieldProps }) =>
-      fieldProps.helpText && <i style={style}>{fieldProps.helpText}</i>,
+    render: ({ gridArea, fieldProps }) =>
+      fieldProps.helpText && <i style={{ gridArea }}>{fieldProps.helpText}</i>,
   },
 ];
 
