@@ -5,16 +5,14 @@ import { type FieldElementConfig, type CSSValue } from './types';
 export type Props = {
   children: Node,
   columns: number,
-  fieldElementVerticalSpacing: CSSValue,
-  fieldHorizontalSpacing: CSSValue,
+  fieldSpacing: CSSValue,
   fieldElements: Array<FieldElementConfig>,
 };
 
 const FieldRow = ({
   children,
   columns = 2,
-  fieldElementVerticalSpacing = '5px',
-  fieldHorizontalSpacing = '10px',
+  fieldSpacing = '10px',
   fieldElements,
 }: Props) => (
   <div
@@ -27,7 +25,7 @@ const FieldRow = ({
       // multiple columns. This keeps all field sizes directly proportional
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
       // defines spacing between rows and columns
-      gridGap: `${fieldElementVerticalSpacing} ${fieldHorizontalSpacing}`,
+      gridGap: `0 ${fieldSpacing}`,
     }}
   >
     {children}

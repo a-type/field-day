@@ -10,27 +10,19 @@ class FieldGroup extends React.PureComponent<FieldGroupProps> {
 
   static defaultProps = {
     columns: 2,
-    fieldElementVerticalSpacing: '5px',
-    fieldHorizontalSpacing: '10px',
+    fieldSpacing: '10px',
     fieldElements: defaultFieldElementConfig,
   };
 
   render() {
-    const {
-      columns,
-      children,
-      fieldElements,
-      fieldHorizontalSpacing,
-      fieldElementVerticalSpacing,
-    } = this.props;
+    const { columns, children, fieldElements, fieldSpacing } = this.props;
 
     return (
       <Provider columns={columns} fieldElements={fieldElements}>
         <FieldGrid
           columns={columns}
           fieldElements={fieldElements}
-          fieldElementVerticalSpacing={fieldElementVerticalSpacing}
-          fieldHorizontalSpacing={fieldHorizontalSpacing}
+          fieldSpacing={fieldSpacing}
         >
           {children}
         </FieldGrid>

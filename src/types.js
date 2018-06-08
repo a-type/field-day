@@ -11,7 +11,8 @@ export type FieldProps = UserSuppliedProps & {
 };
 
 export type RenderElementFunctionArgs = {
-  style: {},
+  gridArea: string,
+  config: FieldElementConfig,
   fieldProps: Props,
 };
 export type RenderElementFunction = (args: RenderElementFunctionArgs) => Node;
@@ -25,7 +26,6 @@ export type FieldElementConfig = {
 export type FieldGroupProps = {
   columns: number,
   children: ChildrenArray<Element<typeof Field>>,
-  fieldElementVerticalSpacing: CSSValue,
-  fieldHorizontalSpacing: CSSValue,
+  fieldSpacing: CSSValue,
   fieldElements: Array<FieldElementConfig>,
 };

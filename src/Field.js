@@ -17,33 +17,25 @@ class Field extends React.Component<FieldProps> {
     columnSpan: 1,
   };
 
-  stylesFor = (
+  gridAreaFor = (
     element: FieldElementConfig,
     elementIndex: number,
     { column, row, columns, fieldIndex, elements }: FieldInfo,
-  ): {} => {
+  ): string => {
     const { columnSpan } = this.props;
 
     const elementRow = row * elements.length + elementIndex;
 
-    const styles = {
-      gridArea: `${elementRow + 1} / ${column + 1} / auto / ${column +
-        columnSpan +
-        1}`,
-      // align-self determines how the parts vertically align if an adjacent part is taller.
-      // labels should stick to the bottom if an adjacent label has two or more lines.
-      // content and helpText should stick to the top if an adjacent element is taller than them.
-      // TODO: make user-controlled?
-      alignSelf: element.verticalAlign,
-    };
-
-    return styles;
+    return `${elementRow + 1} / ${column + 1} / auto / ${column +
+      columnSpan +
+      1}`;
   };
 
   callRenderElements = (fieldInfo: FieldInfo) =>
     fieldInfo.elements.map((element, index) =>
       element.render({
-        style: this.stylesFor(element, index, fieldInfo),
+        gridArea: this.gridAreaFor(element, index, fieldInfo),
+        config: element,
         fieldProps: this.props,
       }),
     );

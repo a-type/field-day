@@ -84,17 +84,21 @@ storiesOf('Field', module)
     </Field.Group>
   ))
   .add('field alignment', () => (
-    <Field.Group>
-      <Field align="start" label="Start">
+    <Field.Group columns={1}>
+      <Field horizontalAlign="start" labelHorizontalAlign="start" label="Start">
         <Input />
       </Field>
-      <Field align="center" label="Center">
+      <Field
+        horizontalAlign="center"
+        labelHorizontalAlign="center"
+        label="Center"
+      >
         <Input />
       </Field>
-      <Field align="end" label="End">
+      <Field horizontalAlign="end" labelHorizontalAlign="end" label="End">
         <Input />
       </Field>
-      <Field columnSpan={2}>
+      <Field>
         <Input value="Below, a more useful scenario..." />
       </Field>
       <Field label="Username">
@@ -103,21 +107,18 @@ storiesOf('Field', module)
       <Field label="Password">
         <Input />
       </Field>
-      <Field align="center">
+      <Field horizontalAlign="end">
         <div>
           <input type="checkbox" value="remember" />
           <label>Remember me</label>
+          <button style={{ marginLeft: '5px' }}>Sign up</button>
         </div>
-      </Field>
-      <Field align="end">
-        <button>Sign up</button>
       </Field>
     </Field.Group>
   ))
   .add('customized spacing', () => (
     <Field.Group
-      fieldElementVerticalSpacing="8px"
-      fieldHorizontalSpacing="20px"
+      fieldSpacing="50px"
       fieldElements={[
         {
           ...Field.Group.defaultFieldElements[0],
@@ -189,10 +190,15 @@ storiesOf('Field', module)
       ...Field.Group.defaultFieldElements,
       // our 'helptext' custom element
       {
-        height: '20px',
+        height: 'auto',
         verticalAlign: 'top',
-        render: ({ style, fieldProps }) =>
-          fieldProps.helpText && <i style={style}>{fieldProps.helpText}</i>,
+        spaceAfter: '10px',
+        render: ({ gridArea, fieldProps, config }) =>
+          fieldProps.helpText && (
+            <i style={{ gridArea, marginBottom: config.spaceAfter }}>
+              {fieldProps.helpText}
+            </i>
+          ),
       },
     ];
 
@@ -202,6 +208,15 @@ storiesOf('Field', module)
           <Input />
         </Field>
         <Field label="Label 2">
+          <Input />
+        </Field>
+        <Field label="Label 3" helpText="Another help text">
+          <Input />
+        </Field>
+        <Field label="Label 4">
+          <Input />
+        </Field>
+        <Field label="Label 5">
           <Input />
         </Field>
       </Field.Group>
